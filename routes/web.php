@@ -20,6 +20,11 @@ Route::get('/', function () {
 //     Route::get('test', 'TestController@index')->name('test.index');
 // });
 
+// 聊天室demo
+Route::group(['namespace' => '\App\Http\Controllers'], function () {
+    Route::get('chat', 'ChatController@index')->name('chat.index');
+});
+
 // 玩家
 Route::group(['prefix' => 'player', 'namespace' => '\App\Rpc\Player\Controllers'], function ($route) {
     // 查看是否是竞赛新玩家
@@ -40,8 +45,6 @@ Route::group(['prefix' => 'rank', 'namespace' => '\App\Rpc\Rank\Controllers'], f
     Route::get('/index/{user}', 'RankController@index')->name('rank.index');
     // 参与排位赛
     Route::post('/play/{user}', 'RankController@play')->name('rank.play');
-    // 测试
-    Route::get('/test', 'TestController@index')->name('test.index');
 });
 // 排行榜
 

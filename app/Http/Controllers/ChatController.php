@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Rpc\Rank\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class TestController extends Controller
+class ChatController extends Controller
 {  
     public function index()
     {
