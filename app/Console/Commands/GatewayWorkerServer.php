@@ -67,7 +67,7 @@ class GatewayWorkerServer extends Command
         $worker->name            = 'BusinessWorker';                        #设置BusinessWorker进程的名称
         $worker->count           = 1;                                       #设置BusinessWorker进程的数量
         $worker->registerAddress = '127.0.0.1:1236';                        #注册服务地址
-        // $worker->transport       = 'ssl';
+        $worker->transport       = 'ssl';
         $worker->eventHandler    = \App\GatewayWorker\Events::class;            #设置使用哪个类来处理业务,业务类至少要实现onMessage静态方法，onConnect和onClose静态方法可以不用实现
     }
 
