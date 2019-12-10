@@ -10,10 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
+// 测试
+Route::get('/test', 'Test');
 
 // 模拟RPC网关
 // Route::group(['namespace' => '\App\Rpc'], function () {
