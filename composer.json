@@ -12,7 +12,11 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "zhuqipeng/laravel-hprose": "v1.0-alpha"
+        "zhuqipeng/laravel-hprose": "v1.0-alpha",
+        "predis/predis": "^1.1",
+        "workerman/gateway-worker" : ">=3.0.0",
+        "workerman/gatewayclient": "^3.0",
+        "workerman/workerman": "^3.5"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

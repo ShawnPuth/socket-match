@@ -4,6 +4,7 @@ namespace App\Rpc\Rank\Controllers;
 
 use Result;
 use App\Models\User;
+use GatewayClient\Gateway;
 use Illuminate\Http\Request;
 use App\Rpc\Services\RankService;
 use App\Rpc\Services\PlayerService;
@@ -35,5 +36,13 @@ class RankController extends Controller
             'danList' => $danList,
             'userInfo' => $userInfo
         ]);
+    }
+
+    /**
+     * 进入排位匹配池
+     */
+    public function doMatch(Request $request)
+    {
+        
     }
 }
