@@ -176,7 +176,7 @@
                </form>
                <div>
                &nbsp;&nbsp;&nbsp;&nbsp;<b>房间列表:</b>（当前在&nbsp;房间<?php echo isset($_GET['room_id'])&&intval($_GET['room_id'])>0 ? intval($_GET['room_id']):1; ?>）<br>
-               &nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=1">房间1</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=2">房间2</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=3">房间3</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=4">房间4</a>
+               &nbsp;&nbsp;&nbsp;&nbsp;<a href="/chat?room_id=1">房间1</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/chat?room_id=2">房间2</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/chat?room_id=3">房间3</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/chat?room_id=4">房间4</a>
                <br><br>
                </div>
                <p class="cp">PHP多进程+Websocket(HTML5/Flash)+Socket实时推送技术&nbsp;&nbsp;&nbsp;&nbsp;Powered by <a href="#" target="_blank">Brill</a></p>
