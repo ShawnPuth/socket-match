@@ -4,7 +4,14 @@
   <link href="/worker-chat/css/bootstrap.min.css" rel="stylesheet">
     <link href="/worker-chat/css/jquery-sinaEmotion-2.1.0.min.css" rel="stylesheet">
     <link href="/worker-chat/css/style.css" rel="stylesheet">
-	
+    <style>
+    #dialog {
+        background:url(/worker-chat/img/chatbg1.jpg) no-repeat  center
+    }
+    #userlist {
+        background:url(/worker-chat/img/timg.jpg) no-repeat  center
+    }
+  </style>
   <script type="text/javascript" src="/worker-chat/js/swfobject.js"></script>
   <script type="text/javascript" src="/worker-chat/js/web_socket.js"></script>
   <script type="text/javascript" src="/worker-chat/js/jquery.min.js"></script>
@@ -112,10 +119,10 @@
     	var client_list_slelect = $("#client_list");
     	userlist_window.empty();
     	client_list_slelect.empty();
-    	userlist_window.append('<h4>在线用户</h4><ul>');
+    	userlist_window.append('<h4 style="color:white">在线用户</h4><ul>');
     	client_list_slelect.append('<option value="all" id="cli_all">所有人</option>');
     	for(var p in client_list){
-            userlist_window.append('<li id="'+p+'">'+client_list[p]+'</li>');
+            userlist_window.append('<li style="color:white" id="'+p+'">'+client_list[p]+'</li>');
             client_list_slelect.append('<option value="'+p+'">'+client_list[p]+'</option>');
         }
     	$("#client_list").val(select_client_id);
