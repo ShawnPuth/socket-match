@@ -25,6 +25,7 @@ namespace App\GatewayWorker;
  * 聊天主逻辑
  * 主要是处理 onMessage onClose 
  */
+use Carbon\Carbon;
 use \GatewayWorker\Lib\Gateway;
 
 class Events
@@ -53,6 +54,8 @@ class Events
         // debug
         echo "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id session:".json_encode($_SESSION)." onMessage:".$message."\n";
         
+        // 获取当前时间
+        $time = Carbon::now('Asia/Shanghai');
         // 客户端传递的是json数据
         $message_data = json_decode($message, true);
         if(!$message_data)
@@ -89,7 +92,7 @@ class Events
                 $clients_list[$client_id] = $client_name;
                 
                 // 转播给当前房间的所有客户端，xx进入聊天室 message {type:login, client_id:xx, name:xx} 
-                $new_message = array('type'=>$message_data['type'], 'client_id'=>$client_id, 'client_name'=>htmlspecialchars($client_name), 'time'=>date('Y-m-d H:i:s'));
+                $new_message = array('type'=>$message_data['type'], 'client_id'=>$client_id, 'client_name'=>htmlspecialchars($client_name), 'time'=>$time);
                 Gateway::sendToGroup($room_id, json_encode($new_message));
                 Gateway::joinGroup($client_id, $room_id);
                
@@ -117,7 +120,7 @@ class Events
                         'from_client_name' =>$client_name,
                         'to_client_id'=>$message_data['to_client_id'],
                         'content'=>"<b>对你说: </b>".nl2br(htmlspecialchars($message_data['content'])),
-                        'time'=>date('Y-m-d H:i:s'),
+                        'time'=>$time,
                     );
                     Gateway::sendToClient($message_data['to_client_id'], json_encode($new_message));
                     $new_message['content'] = "<b>你对".htmlspecialchars($message_data['to_client_name'])."说: </b>".nl2br(htmlspecialchars($message_data['content']));
@@ -130,7 +133,7 @@ class Events
                     'from_client_name' =>$client_name,
                     'to_client_id'=>'all',
                     'content'=>nl2br(htmlspecialchars($message_data['content'])),
-                    'time'=>date('Y-m-d H:i:s'),
+                    'time'=>$time,
                 );
                 return Gateway::sendToGroup($room_id ,json_encode($new_message));
         }
@@ -141,17 +144,19 @@ class Events
     * @param integer $client_id 客户端id
     */
    public static function onClose($client_id)
-   {
-       // debug
-       $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
-       \Log::info($msg);
-       // 从房间的客户端列表中删除
-       if(isset($_SESSION['room_id']))
-       {
-           $room_id = $_SESSION['room_id'];
-           $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>date('Y-m-d H:i:s'));
-           Gateway::sendToGroup($room_id, json_encode($new_message));
-       }
+   {    
+        // 获取当前时间
+        $time = Carbon::now('Asia/Shanghai');
+        // debug
+        $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
+        \Log::info($msg);
+        // 从房间的客户端列表中删除
+        if(isset($_SESSION['room_id']))
+        {
+            $room_id = $_SESSION['room_id'];
+            $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>$time);
+            Gateway::sendToGroup($room_id, json_encode($new_message));
+        }
    }
   
 }
