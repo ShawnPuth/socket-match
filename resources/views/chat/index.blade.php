@@ -16,7 +16,7 @@
     WEB_SOCKET_SWF_LOCATION = "/worker-chat/swf/WebSocketMain.swf";
     // 开启flash的websocket debug
     WEB_SOCKET_DEBUG = true;
-    var ws, name, client_list={};
+    var ws, name, client_list={},avatar;
 
     // 连接服务端
     function connect() {
@@ -61,6 +61,7 @@
             // 登录 更新用户列表
             case 'login':
                 //{"type":"login","client_id":xxx,"client_name":"xxx","client_list":"[...]","time":"xxx"}
+                avatar = "http://lorempixel.com/38/38/?'+from_client_id+'";
                 say(data['client_id'], data['client_name'],  data['client_name']+' 加入了聊天室', data['time']);
                 if(data['client_list'])
                 {
@@ -136,8 +137,8 @@
                 return url;
         }
         );
-
-    	$("#dialog").append('<div class="speech_item"><img src="http://lorempixel.com/38/38/?'+from_client_id+'" class="user_icon" /> '+from_client_name+' <br> '+time+'<div style="clear:both;"></div><p class="triangle-isosceles top">'+content+'</p> </div>').parseEmotion();
+        // $("#dialog").append('<div class="speech_item"><img src="'+avatar+'" class="user_icon" /> '+from_client_name+' <br> '+time+'<div style="clear:both;"></div><p class="triangle-isosceles top">'+content+'</p> </div>').parseEmotion();
+    	$("#dialog").append('<div class="speech_item">'+from_client_name+' <br> '+time+'<div style="clear:both;"></div><p class="triangle-isosceles top">'+content+'</p> </div>').parseEmotion();
     }
 
     $(function(){
