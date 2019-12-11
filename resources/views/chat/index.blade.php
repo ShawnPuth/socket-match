@@ -1,6 +1,6 @@
 <html><head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <title>workerman-chat PHP聊天室 Websocket(HTLM5/Flash)+PHP多进程socket实时推送技术</title>
+  <title>WebSocket聊天室 Powered By Brill</title>
   <link href="/worker-chat/css/bootstrap.min.css" rel="stylesheet">
     <link href="/worker-chat/css/jquery-sinaEmotion-2.1.0.min.css" rel="stylesheet">
     <link href="/worker-chat/css/style.css" rel="stylesheet">
@@ -178,13 +178,12 @@
                &nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=1">房间1</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=2">房间2</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=3">房间3</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="/?room_id=4">房间4</a>
                <br><br>
                </div>
-               <p class="cp">PHP多进程+Websocket(HTML5/Flash)+PHP Socket实时推送技术&nbsp;&nbsp;&nbsp;&nbsp;Powered by <a href="http://www.workerman.net/workerman-chat" target="_blank">workerman-chat</a></p>
+               <p class="cp">PHP多进程+Websocket(HTML5/Flash)+Socket实时推送技术&nbsp;&nbsp;&nbsp;&nbsp;Powered by <a href="#" target="_blank">Brill</a></p>
 	        </div>
 	        <div class="col-md-3 column">
 	           <div class="thumbnail">
                    <div class="caption" id="userlist"></div>
                </div>
-               <a href="http://workerman.net:8383" target="_blank"><img style="width:252px;margin-left:5px;" src="/worker-chat/img/workerman-todpole.png"></a>
 	        </div>
 	    </div>
     </div>

@@ -12,6 +12,7 @@
 */
 // 测试
 Route::get('/test', 'Test');
+Route::view('/demo',  'test.index');
 
 // 模拟RPC网关
 // Route::group(['namespace' => '\App\Rpc'], function () {
