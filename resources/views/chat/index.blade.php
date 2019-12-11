@@ -9,7 +9,7 @@
         background:url(/worker-chat/img/chatbg1.jpg) no-repeat  center
     }
     #userlist {
-        background:url(/worker-chat/img/timg.jpg) no-repeat  center
+        background:url(/worker-chat/img/timg.jpg)  center
     }
   </style>
   <script type="text/javascript" src="/worker-chat/js/swfobject.js"></script>
