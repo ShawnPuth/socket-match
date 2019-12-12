@@ -25,7 +25,7 @@
     // 连接服务端
     function connect() {
        // 创建websocket
-       ws = new WebSocket("ws://competition.jinzhuanglvshi.com:7272");
+       ws = new WebSocket("ws://47.104.70.213:7272");
        // 当socket连接打开时，输入用户名
     //    ws.onopen = onopen;
        // 当有消息时根据消息类型显示不同信息
@@ -53,6 +53,10 @@
             case 'init':
                 console.log('当前client_id:'+data['client_id']);
                 client_id = data['client_id'];
+            break;
+            case 'rank':
+                console.log(data['content']);
+                alert('匹配成功,开始答题');
             break;
         }
     }

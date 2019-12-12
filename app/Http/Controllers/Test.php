@@ -44,12 +44,11 @@ class Test extends Controller
     // 手动匹配
     public function Match()
     {   
-        Gateway::$registerAddress = 'competition.jinzhuanglvshi.com:1236';
-
         // 查询匹配池中数量
         $num = Redis::llen('rankList');
-        // dd($num);
+    
         if ($num >= 2) {
+            // dd($num);
             $firstId = Redis::lpop('rankList');
             $firstClientId = Redis::hget('rank', $firstId);
             $secondId = Redis::lpop('rankList');
@@ -69,18 +68,31 @@ class Test extends Controller
             Gateway::bindUid($secondClientId, $secondId);
             // 创建房间
             $roomId = $pkRecord->id;
-            $_SESSION['id'] = $firstUser->id;
-            $_SESSION['nickname'] = $firstUser->nickname;
-            $_SESSION['avatar'] = $firstUser->avatar;
+            Gateway::setSession($firstClientId, [
+                'id' => $firstUser->id,
+                'nickname' => $firstUser->nick_name,
+                'avatar' => $firstUser->avatar
+            ]);
             Gateway::joinGroup($firstClientId, $roomId);
             // 用户2进入房间
-            $_SESSION['id'] = $secondUser->id;
-            $_SESSION['nickname'] = $secondUser->nickname;
-            $_SESSION['avatar'] = $secondUser->avatar;
+            Gateway::setSession($secondClientId, [
+                'id' => $secondUser->id,
+                'nickname' => $secondUser->nick_name,
+                'avatar' => $secondUser->avatar
+            ]);
             Gateway::joinGroup($secondClientId, $roomId);
             // 获取房间玩家信息
             $clients_list = Gateway::getClientSessionsByGroup($roomId);
-            dd($clients_list);
+            foreach ($clients_list as $tmp_client_id => $item) {
+                $userList[]=$item;
+            }
+            $new_message = array(
+                'type' => 'rank',
+                'content' => $userList
+            );
+            
+            // 房间用户信息发回前端
+            return Gateway::sendToGroup($roomId, json_encode($new_message));
         }
     }
 
