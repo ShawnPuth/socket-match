@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use DB;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\PkRecord;
+use GatewayClient\Gateway;
+use Illuminate\Http\Request;
+use App\Rpc\Services\PkRecordService;
+use App\Rpc\Services\QuestionService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 
@@ -18,37 +23,76 @@ use Illuminate\Support\Facades\Redis;
 class Test extends Controller
 {
     /**
-     * 处理请求。
+     * 接受匹配请求，放入匹配池
      */
-    public function __invoke()
+    public function index(Request $request, User $user)
     {   
-        // $clientId1 = 11;
-        // $user1 = User::find(1);
+        // user_id 存入 redis 链表
+        Redis::lpush('rankList', $user->id);
+        // client_id 存入redis hash表
+        Redis::command('hset', ['rank', $user->id, $request->input('client_id')]);
 
-        // $redis->hset('rank', $user1->id, $clientId1);  //将key为'key1' value为'v1'的元素存入hash1表
-        // $redis->hset('rank', $user2->id, $clientId2);
-        Redis::command('hset', ['rank', 1, 11]);
-        Redis::command('hset', ['rank', 2, 22]);
-        Redis::command('hset', ['rank', 3, 33]);
-        Redis::command('hset', ['rank', 4, 44]);
+        echo json_encode([
+            'msg' => '正在匹配',
+            'data' => [
+                'listLength' => Redis::llen('rankList'),
+                'hash' => Redis::hgetall('rank')
+            ]
+        ]);
+    }
 
-        $num = Redis::hlen('rank');
-        if ($num>=2) {
-            // 取出所有的key
-            $hkeys = Redis::hkeys('rank');
-            // 获取Hash中所有的元素
-            $lists = Redis::hgetall('rank');
-            // 取出hash中前两个key 和 value 赋值
-            $firstId = $hkeys[0];
-            $firstClientId = $lists[$firstId];
-            $secondId = $hkeys[1];
-            $secondClientId = $lists[$secondId];
+    // 手动匹配
+    public function Match()
+    {   
+        Gateway::$registerAddress = 'competition.jinzhuanglvshi.com:1236';
+
+        // 查询匹配池中数量
+        $num = Redis::llen('rankList');
+        // dd($num);
+        if ($num >= 2) {
+            $firstId = Redis::lpop('rankList');
+            $firstClientId = Redis::hget('rank', $firstId);
+            $secondId = Redis::lpop('rankList');
+            $secondClientId = Redis::hget('rank', $secondId);
             // 删除hash中被取出的元素
             Redis::hdel('rank', $firstId);
             Redis::hdel('rank', $secondId);
-            // 查询两个用户信息并发送给woker返回前端 
+            // 查询两个用户信息
+            $firstUser = User::find($firstId);
+            $secondUser = User::find($secondId);
+            // 抽取问题
+            $questions = QuestionService::extractQuestion();
+            // 创建排位对战记录,获取房间号
+            $pkRecord = PkRecordService::createRoom($firstUser, $questions, $type = 2);
+            // 绑定uid到client_id;
+            Gateway::bindUid($firstClientId, $firstId);
+            Gateway::bindUid($secondClientId, $secondId);
+            // 创建房间
+            $roomId = $pkRecord->id;
+            $_SESSION['id'] = $firstUser->id;
+            $_SESSION['nickname'] = $firstUser->nickname;
+            $_SESSION['avatar'] = $firstUser->avatar;
+            Gateway::joinGroup($firstClientId, $roomId);
+            // 用户2进入房间
+            $_SESSION['id'] = $secondUser->id;
+            $_SESSION['nickname'] = $secondUser->nickname;
+            $_SESSION['avatar'] = $secondUser->avatar;
+            Gateway::joinGroup($secondClientId, $roomId);
+            // 获取房间玩家信息
+            $clients_list = Gateway::getClientSessionsByGroup($roomId);
+            dd($clients_list);
         }
+    }
 
-        dd(Redis::hgetall('rank'));
+    // 清空redis
+    public function clearRedis()
+    {   
+        // 清除rankList中 所有与 1 相等的值
+        // Redis::lrem('rankList', 0, 1);
+        // 删除 rank 中 key 为 1 的元素
+        // Redis::hdel('rank', 1);
+        
+        dd(Redis::lrange('rankList', 0, 10));
+        // dd(Redis::hgetall('rank'));
     }
 }

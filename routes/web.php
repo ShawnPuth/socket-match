@@ -11,7 +11,9 @@
 |
 */
 // 测试
-Route::get('/test', 'Test');
+Route::post('/test/{user}/index', 'Test@index');
+Route::get('/test/match', 'Test@match');
+Route::get('/test/clear', 'Test@clearRedis');
 Route::view('/demo',  'test.index');
 
 // 模拟RPC网关

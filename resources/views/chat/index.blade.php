@@ -64,7 +64,7 @@
             // 服务端ping客户端
             case 'ping':
                 ws.send('{"type":"pong"}');
-                break;;
+                break;
             // 登录 更新用户列表
             case 'login':
                 //{"type":"login","client_id":xxx,"client_name":"xxx","client_list":"[...]","time":"xxx"}
