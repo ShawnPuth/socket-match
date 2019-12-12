@@ -80,7 +80,7 @@ class GatewayWorkerServer extends Command
         $gateway->startPort            = 2300;                              #监听本机端口的起始端口
         $gateway->pingInterval         = 30;
         $gateway->pingNotResponseLimit = 0;                                 #服务端主动发送心跳
-        $gateway->pingData             = '{"mode":"heart"}';
+        $gateway->pingData             = '{"type":"ping"}';
         $gateway->registerAddress      = '127.0.0.1:1236';                  #注册服务地址
     }
 
