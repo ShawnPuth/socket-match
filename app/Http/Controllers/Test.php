@@ -48,10 +48,9 @@ class Test extends Controller
         $num = Redis::llen('rankList');
     
         if ($num >= 2) {
-            // dd($num);
-            $firstId = Redis::lpop('rankList');
+            $firstId = Redis::rpop('rankList');
             $firstClientId = Redis::hget('rank', $firstId);
-            $secondId = Redis::lpop('rankList');
+            $secondId = Redis::rpop('rankList');
             $secondClientId = Redis::hget('rank', $secondId);
             // 删除hash中被取出的元素
             Redis::hdel('rank', $firstId);
@@ -90,7 +89,7 @@ class Test extends Controller
                 'type' => 'rank',
                 'content' => $userList
             );
-            
+
             // 房间用户信息发回前端
             return Gateway::sendToGroup($roomId, json_encode($new_message));
         }
@@ -100,11 +99,11 @@ class Test extends Controller
     public function clearRedis()
     {   
         // 清除rankList中 所有与 1 相等的值
-        // Redis::lrem('rankList', 0, 1);
+        // Redis::lrem('rankList', 0, 3);
         // 删除 rank 中 key 为 1 的元素
-        // Redis::hdel('rank', 1);
+        // Redis::hdel('rank', 3);
         
-        dd(Redis::lrange('rankList', 0, 10));
-        // dd(Redis::hgetall('rank'));
+        // dd(Redis::lrange('rankList', 0, 100));
+        dd(Redis::hgetall('rank'));
     }
 }

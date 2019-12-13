@@ -57,7 +57,7 @@
             break;
             case 'rank':
                 console.log(data['content']);
-                // 关闭定时器3
+                // 关闭定时器
                 clearInterval(myVar);
                 alert('匹配成功,开始答题');
             break;
@@ -108,7 +108,6 @@
                     <div class="say-btn">
                         <input type="text" id="uid" placeholder="输入uid" class="btn btn-default"  />
                         <input type="submit" class="btn btn-default" value="开始匹配" />
-                        <input type="text" id="displayBox" name="displayBox" value="0">
                     </div>
                </form>
 	        </div>
