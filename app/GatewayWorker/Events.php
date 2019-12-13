@@ -161,7 +161,7 @@ class Events
 
         // 检查匹配池中是否存在该用户，如果有，从匹配池中移除
         // 根据客户端id获取用户id
-        $userId = Gateway::getUidByClientId($client_id);
+        $userId = $_SESSION['id'];
         if ($userId) {
             RankService::removeMatchUser($userId);
         }
