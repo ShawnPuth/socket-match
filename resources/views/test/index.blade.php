@@ -89,7 +89,7 @@
                 if(x<10) {
                     x = x+1
                     document.getElementById("displayBox").value=x 
-                    checkMatch()
+                    // checkMatch()
                     myVar = setTimeout(countSecond(), 1000)
                 }
             }
