@@ -20,14 +20,15 @@
     WEB_SOCKET_SWF_LOCATION = "/worker-chat/swf/WebSocketMain.swf";
     // 开启flash的websocket debug
     WEB_SOCKET_DEBUG = true;
-    var ws, client_id;
+    var ws, client_id, myVar;
 
     // 连接服务端
     function connect() {
        // 创建websocket
-       ws = new WebSocket("ws://47.104.70.213:7272");
+        ws = new WebSocket("ws://47.104.70.213:7272");
+        // ws = new WebSocket("ws://192.168.56.11:7272");
        // 当socket连接打开时，输入用户名
-    //    ws.onopen = onopen;
+       // ws.onopen = onopen;
        // 当有消息时根据消息类型显示不同信息
        ws.onmessage = onmessage; 
        ws.onclose = function() {
@@ -56,7 +57,12 @@
             break;
             case 'rank':
                 console.log(data['content']);
+                // 关闭定时器3
+                clearTimeout(myVar);
                 alert('匹配成功,开始答题');
+            break;
+            case 'logout':
+
             break;
         }
     }
@@ -69,7 +75,7 @@
         var to_user_id = $('#uid').val();
         // 发起匹配请求
         $.ajax({
-            url: '/test/'+to_user_id+'/index',
+            url: '/rank/'+to_user_id+'/match',
             method: 'POST',
             dataType: 'json',
             data: {
@@ -77,12 +83,40 @@
             }
         }).done(function (a) {
             console.log(a.data)
-            alert(a.msg);
-        }).fail(function (xhr) {
+            // 开启定时器,每秒监测一次匹配池
+            var x=0
+            function countSecond() {      　
+                if(x<10) {
+                    x = x+1
+                    document.getElementById("displayBox").value=x 
+                    checkMatch()
+                    myVar = setTimeout(countSecond(), 1000)
+                }
+            }
+            countSecond()
+        }); 
+    }
 
-        }).always(function () {
+    function checkMatch() {
+        // 执行匹配监测
+        $.ajax({
+        url: '/rank/checkMatch',
+        method: 'POST',
+        dataType: 'json',
+        data: {}
+        }).done(function (a) {
+            console.log(a) 
         });
     }
+    // 定时器
+    // function countSecond() {      　
+    //     if(x<10) {
+    //         x = x+1
+    //         document.getElementById("displayBox").value=x 
+    //         checkMatch()
+    //         myVar = setTimeout(countSecond(), 1000)
+    //     }
+    // }
   </script>
 </head>
 <body onload="connect();">
@@ -93,6 +127,7 @@
                     <div class="say-btn">
                         <input type="text" id="uid" placeholder="输入uid" class="btn btn-default"  />
                         <input type="submit" class="btn btn-default" value="开始匹配" />
+                        <input type="text" id="displayBox" name="displayBox" value="0">
                     </div>
                </form>
 	        </div>

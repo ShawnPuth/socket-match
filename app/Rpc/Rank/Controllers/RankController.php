@@ -6,6 +6,7 @@ use Result;
 use App\Models\User;
 use GatewayClient\Gateway;
 use Illuminate\Http\Request;
+use App\Schedule\CheckMatch;
 use App\Rpc\Services\RankService;
 use App\Rpc\Services\PlayerService;
 use App\Http\Controllers\Controller;
@@ -20,12 +21,6 @@ use Illuminate\Support\Facades\Redis;
  */
 class RankController extends Controller
 {   
-    // Gateway注册地址
-    public function __construct()
-    {
-        Gateway::$registerAddress = '127.0.0.1:1236';
-    }
-
     /**
      * 排位赛首页数据
      */
@@ -46,16 +41,37 @@ class RankController extends Controller
     }
 
     /**
-     * 进入排位匹配池
+     * 接收用户请求，放入redis 匹配池
+     * 检测匹配池用户数量，数量大于两个就组成匹配，
+     * 同时前端定时器5秒内没有监听到匹配成功信号，
+     * 自动请求机器人匹配接口。
      */
     public function doMatch(Request $request, User $user)
     {
-        // 服务器做任务调度每秒监听redis的匹配用户，数量大于两个就组成匹配，
-        // 向对手发送昵称，清除匹配数组，
-        // 同时前端定时器5秒内没有监听到匹配成功信号，
-        // 自动请求机器人匹配接口。
+        // user_id 存入 redis 链表
+        Redis::lpush('rankList', $user->id);
+        // client_id 存入redis hash表
+        Redis::command('hset', ['rank', $user->id, $request->input('client_id')]);
 
-        // 接收用户放入redis匹配数组
-        Redis::command('rank', [$user->id, $user->nickname, $user->avatar]);
+        // 检测匹配池用户数量
+        echo json_encode([
+            'code' => 200,
+            'data' => [
+                'listLength' => Redis::llen('rankList'),
+                'hash' => Redis::hgetall('rank'),
+            ]
+        ]);
+    }
+
+    /**
+     * 监测匹配请求
+     */
+    public function CheckMatch()
+    {
+        if (RankService::CheckMatch()) {
+            echo json_encode([
+                'code' => 200
+            ]);
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace App\GatewayWorker;
  */
 use Carbon\Carbon;
 use \GatewayWorker\Lib\Gateway;
+use App\Rpc\Services\RankService;
 
 class Events
 {   
@@ -146,17 +147,25 @@ class Events
    public static function onClose($client_id)
    {    
         // 获取当前时间
-        $time = Carbon::now('Asia/Shanghai');
-        // debug
-        $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
-        \Log::info($msg);
-        // 从房间的客户端列表中删除
-        if(isset($_SESSION['room_id']))
-        {
-            $room_id = $_SESSION['room_id'];
-            $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>$time);
-            Gateway::sendToGroup($room_id, json_encode($new_message));
+        // $time = Carbon::now('Asia/Shanghai');
+        // // debug
+        // $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
+        // \Log::info($msg);
+        // // 从房间的客户端列表中删除
+        // if(isset($_SESSION['room_id']))
+        // {
+        //     $room_id = $_SESSION['room_id'];
+        //     $new_message = array('type'=>'logout', 'from_client_id'=>$client_id, 'from_client_name'=>$_SESSION['client_name'], 'time'=>$time);
+        //     Gateway::sendToGroup($room_id, json_encode($new_message));
+        // }
+
+        // 检查匹配池中是否存在该用户，如果有，从匹配池中移除
+        // 根据客户端id获取用户id
+        $userId = Gateway::getUidByClientId($client_id);
+        if ($userId) {
+            RankService::removeMatchUser($userId);
         }
+
    }
   
 }

@@ -45,7 +45,9 @@ Route::group(['prefix' => 'rank', 'namespace' => '\App\Rpc\Rank\Controllers'], f
     // 获取首页数据
     Route::get('/index/{user}', 'RankController@index')->name('rank.index');
     // 参与排位赛
-    Route::post('/play/{user}', 'RankController@play')->name('rank.play');
+    Route::post('/{user}/match', 'RankController@doMatch')->name('rank.match');
+    // 监测并执行玩家匹配
+    Route::post('/checkMatch', 'RankController@checkMatch')->name('rank.checkMatch');
 });
 // 排行榜
 
