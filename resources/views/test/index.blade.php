@@ -58,7 +58,7 @@
             case 'rank':
                 console.log(data['content']);
                 // 关闭定时器3
-                clearTimeout(myVar);
+                clearInterval(myVar);
                 alert('匹配成功,开始答题');
             break;
             case 'logout':
@@ -84,21 +84,11 @@
         }).done(function (a) {
             console.log(a.data)
             // 开启定时器,每秒监测一次匹配池
-            x=0
-            function countSecond() {      　
-                if(x<10) {
-                    x = x+1
-                    document.getElementById("displayBox").value=x 
-                    // checkMatch()
-                    setTimeout(countSecond(), 1000)
-                }
-            }
-            countSecond()
+            myVar=setInterval(function(){checkMatch()},1000);
         }); 
     }
-
+    // 执行匹配监测
     function checkMatch() {
-        // 执行匹配监测
         $.ajax({
         url: '/rank/checkMatch',
         method: 'POST',
@@ -108,15 +98,6 @@
             console.log(a) 
         });
     }
-    // 定时器
-    // function countSecond() {      　
-    //     if(x<10) {
-    //         x = x+1
-    //         document.getElementById("displayBox").value=x 
-    //         checkMatch()
-    //         myVar = setTimeout(countSecond(), 1000)
-    //     }
-    // }
   </script>
 </head>
 <body onload="connect();">
