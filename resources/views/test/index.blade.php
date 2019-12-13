@@ -90,7 +90,7 @@
                     x = x+1
                     document.getElementById("displayBox").value=x 
                     // checkMatch()
-                    myVar = setTimeout(countSecond(), 1000)
+                    setTimeout("countSecond()", 1000)
                 }
             }
             countSecond()
