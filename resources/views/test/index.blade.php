@@ -84,7 +84,7 @@
         }).done(function (a) {
             console.log(a.data)
             // 开启定时器,每秒监测一次匹配池
-            var x=0
+            x=0
             function countSecond() {      　
                 if(x<10) {
                     x = x+1
