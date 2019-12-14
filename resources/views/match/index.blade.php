@@ -25,8 +25,8 @@
     // 连接服务端
     function connect() {
        // 创建websocket
-        ws = new WebSocket("ws://47.104.70.213:7272");
-        // ws = new WebSocket("ws://192.168.56.11:7272");
+        // ws = new WebSocket("ws://47.104.70.213:7272");
+        ws = new WebSocket("ws://192.168.56.11:7272");
        // 当socket连接打开时，输入用户名
        // ws.onopen = onopen;
        // 当有消息时根据消息类型显示不同信息
@@ -54,6 +54,7 @@
             case 'init':
                 console.log('当前client_id:'+data['client_id']);
                 client_id = data['client_id'];
+                bindUid(client_id);
             break;
             case 'rank':
                 console.log(data['content']);
@@ -71,11 +72,9 @@
     function onSubmit() {
         // 获取客户端ID
         var to_client_id = client_id;
-        // 自定义用户ID
-        var to_user_id = $('#uid').val();
         // 发起匹配请求
         $.ajax({
-            url: '/rank/'+to_user_id+'/match',
+            url: '/rank/match',
             method: 'POST',
             dataType: 'json',
             data: {
@@ -98,6 +97,31 @@
             console.log(a) 
         });
     }
+    // 登录之后完成uid绑定
+    function bindUid(client_id) {
+        $.ajax({
+        url: '/rank/bindUid',
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            'client_id':client_id
+        }
+        }).done(function (a) {
+            console.log(a) 
+        });
+    }
+    // 退出登录
+    function logout()
+    {
+        $.ajax({
+        url: '/auth/logout',
+        method: 'get',
+        dataType: 'json',
+        data: {}
+        }).done(function (a) {
+            window.location.href = '/login';
+        });
+    }
   </script>
 </head>
 <body onload="connect();">
@@ -106,10 +130,12 @@
 	        <div class="col-md-6 column">
 	           <form onsubmit="onSubmit(); return false;">
                     <div class="say-btn">
-                        <input type="text" id="uid" placeholder="输入uid" class="btn btn-default"  />
                         <input type="submit" class="btn btn-default" value="开始匹配" />
                     </div>
                </form>
+                <div class="say-btn">
+                    <input type="button" onclick="logout()" class="btn btn-default" value="退出登录" />
+                </div>
 	        </div>
 	    </div>
     </div>

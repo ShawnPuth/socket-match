@@ -66,25 +66,9 @@ class RankService
             $questions = QuestionService::extractQuestion();
             // 创建排位对战记录,获取房间号
             $pkRecord = PkRecordService::createRoom($firstUser, $questions, $type = 2);
-            // 绑定uid到client_id;
-            // Gateway::bindUid($firstClientId, $firstId);
-            // Gateway::bindUid($secondClientId, $secondId);
-            // 创建房间
+            // 创建房间 用户进入房间
             $roomId = $pkRecord->id;
-            Gateway::setSession($firstClientId, [
-                'id' => $firstUser->id,
-                'nickname' => $firstUser->nick_name,
-                'avatar' => $firstUser->avatar
-            ]);
-            Gateway::bindUid($firstClientId, $firstId);
             Gateway::joinGroup($firstClientId, $roomId);
-            // 用户2进入房间
-            Gateway::setSession($secondClientId, [
-                'id' => $secondUser->id,
-                'nickname' => $secondUser->nick_name,
-                'avatar' => $secondUser->avatar
-            ]);
-            Gateway::bindUid($secondClientId, $secondId);
             Gateway::joinGroup($secondClientId, $roomId);
             // 获取房间玩家信息
             $clients_list = Gateway::getClientSessionsByGroup($roomId);

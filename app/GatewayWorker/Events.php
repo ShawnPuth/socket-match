@@ -150,7 +150,8 @@ class Events
         // $time = Carbon::now('Asia/Shanghai');
         // // debug
         // $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
-        // \Log::info($msg);
+        
+        \Log::info('客户端：'.$client_id.'已退出,userId是:'.$_SESSION['id']);
         // // 从房间的客户端列表中删除
         // if(isset($_SESSION['room_id']))
         // {

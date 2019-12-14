@@ -2,6 +2,7 @@
 
 namespace App\Rpc\Rank\Controllers;
 
+use Auth;
 use Result;
 use App\Models\User;
 use GatewayClient\Gateway;
@@ -43,24 +44,22 @@ class RankController extends Controller
     /**
      * 接收用户请求，放入redis 匹配池
      * 检测匹配池用户数量，数量大于两个就组成匹配，
-     * 同时前端定时器5秒内没有监听到匹配成功信号，
-     * 自动请求机器人匹配接口。
+     * 同时前端定时器持续发起匹配监测
      */
-    public function doMatch(Request $request, User $user)
+    public function doMatch(Request $request)
     {
         // user_id 存入 redis 链表
-        Redis::lpush('rankList', $user->id);
+        Redis::lpush('rankList', Auth::id());
         // client_id 存入redis hash表
-        Redis::command('hset', ['rank', $user->id, $request->input('client_id')]);
+        Redis::command('hset', ['rank', Auth::id(), $request->input('client_id')]);
 
-        // 检测匹配池用户数量
-        echo json_encode([
+        return [
             'code' => 200,
             'data' => [
                 'listLength' => Redis::llen('rankList'),
                 'hash' => Redis::hgetall('rank'),
             ]
-        ]);
+        ];
     }
 
     /**
@@ -73,5 +72,22 @@ class RankController extends Controller
                 'code' => 200
             ]);
         }
+    }
+
+    /**
+     * 绑定客户端Id 与 用户Id
+     */
+    public function bindUid(Request $request)
+    {   
+        $clientId = $request->input('client_id');
+
+        Gateway::setSession($clientId, [
+            'id' => Auth::id(),
+            'nickname' => Auth::user()->nick_name,
+            'avatar' => Auth::user()->nick_name,
+        ]);
+        Gateway::bindUid($clientId, Auth::id());
+
+        return ['bind' => true];
     }
 }
