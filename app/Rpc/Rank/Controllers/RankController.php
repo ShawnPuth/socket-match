@@ -80,12 +80,6 @@ class RankController extends Controller
     public function bindUid(Request $request)
     {   
         $clientId = $request->input('client_id');
-
-        Gateway::setSession($clientId, [
-            'id' => Auth::id(),
-            'nickname' => Auth::user()->nick_name,
-            'avatar' => Auth::user()->nick_name,
-        ]);
         Gateway::bindUid($clientId, Auth::id());
 
         return ['bind' => true];

@@ -2,7 +2,7 @@
 
 namespace App\Rpc\Services;
 
-use DB;
+use DB,Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Season;
@@ -67,7 +67,19 @@ class RankService
             // 创建排位对战记录,获取房间号
             $pkRecord = PkRecordService::createRoom($firstUser, $questions, $type = 2);
             // 创建房间 用户进入房间
-            $roomId = $pkRecord->id;
+            $roomId = $pkRecord->id;       
+            Gateway::setSession($firstClientId, [
+                'roomId' => $roomId,
+                'id' => $firstId,
+                'nickname' => $firstUser->nick_name,
+                'avatar' => $firstUser->avatar,
+            ]);
+            Gateway::setSession($secondClientId, [
+                'roomId' => $roomId,
+                'id' => $secondId,
+                'nickname' => $secondUser->nick_name,
+                'avatar' => $secondUser->avatar,
+            ]);
             Gateway::joinGroup($firstClientId, $roomId);
             Gateway::joinGroup($secondClientId, $roomId);
             // 获取房间玩家信息

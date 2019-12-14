@@ -151,7 +151,7 @@ class Events
         // // debug
         // $msg =  "client:{$_SERVER['REMOTE_ADDR']}:{$_SERVER['REMOTE_PORT']} gateway:{$_SERVER['GATEWAY_ADDR']}:{$_SERVER['GATEWAY_PORT']}  client_id:$client_id onClose:''\n";
         
-        \Log::info('客户端：'.$client_id.'已退出,userId是:'.$_SESSION['id']);
+        \Log::info('客户端：'.$client_id.'已退出房间：'.$_SESSION['roomId'].',userId是:'.$_SESSION['id']);
         // // 从房间的客户端列表中删除
         // if(isset($_SESSION['room_id']))
         // {
@@ -165,6 +165,11 @@ class Events
         $userId = $_SESSION['id'];
         if ($userId) {
             RankService::removeMatchUser($userId);
+            // 向客户端发送用户退出信息
+            Gateway::sendToGroup($_SESSION['roomId'], json_encode([
+                'type' => 'giveUp',
+                'message' => '用户'.$_SESSION['nickname'].'已经退出房间'
+            ]));
         }
 
    }

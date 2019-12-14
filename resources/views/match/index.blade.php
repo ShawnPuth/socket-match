@@ -62,8 +62,8 @@
                 clearInterval(myVar);
                 alert('匹配成功,开始答题');
             break;
-            case 'logout':
-
+            case 'giveUp':
+                alert(data['message']);
             break;
         }
     }
