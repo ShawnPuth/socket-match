@@ -12,7 +12,7 @@ If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Lar
 
 
 ## GatewayWorker
-
+启动：php artisan gateway-worker:server start --daemon
 
 ## Redis
 
