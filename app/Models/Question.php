@@ -10,7 +10,7 @@ class Question extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_question';
+    protected $table = 'question';
 
     /**
      * 不可以批量赋值的属性。

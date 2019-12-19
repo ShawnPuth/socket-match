@@ -10,7 +10,7 @@ class UserInfo extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_user_info';
+    protected $table = 'player_info';
 
     /**
      * 不可以批量赋值的属性。

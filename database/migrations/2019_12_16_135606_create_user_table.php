@@ -17,6 +17,7 @@ class CreateUserTable extends Migration
             $table->Increments('id');
             $table->string('nick_name', 191)->comment('用户名');
             $table->string('avatar', 191)->comment('头像');
+            $table->string('mobile', 11)->comment('联系人电话');
             $table->timestamps();
         });
     }

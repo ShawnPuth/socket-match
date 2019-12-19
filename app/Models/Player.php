@@ -10,7 +10,7 @@ class Player extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_user';
+    protected $table = 'player';
 
     /**
      * 不可以批量赋值的属性。

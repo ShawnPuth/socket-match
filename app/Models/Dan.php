@@ -10,7 +10,7 @@ class Dan extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_dan';
+    protected $table = 'dan';
 
     /**
      * 不可以批量赋值的属性。

@@ -10,7 +10,7 @@ class QuestionType extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_question_type';
+    protected $table = 'question_type';
 
     /**
      * 不可以批量赋值的属性。

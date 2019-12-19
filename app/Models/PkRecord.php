@@ -10,7 +10,7 @@ class PkRecord extends Model
 {   
     protected $connection = 'mysql';
 
-    protected $table = 'hc_pk_record';
+    protected $table = 'pk_record';
 
     /**
      * 不可以批量赋值的属性。

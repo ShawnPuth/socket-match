@@ -9,9 +9,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable
 {   
-    protected $connection = 'mysql_center';
+    protected $connection = 'mysql';
 
-    protected $table = 'users';
+    protected $table = 'user';
 
     /**
      * 不可以批量赋值的属性。
