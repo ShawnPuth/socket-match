@@ -6,14 +6,18 @@
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+step1:composer update
+
+step2:php artisan migrate:fresh --seed
 
 ## Workerman
+step3:服务器开放端口：1236,7272
 
-
+step4:./resources/views/match/index.blade.php 修改监听的socket IP地址
 ## GatewayWorker
-启动：php artisan gateway-worker:server start --daemon
+step5:启动socket：php artisan gateway-worker:server start --daemon
 
+step6: 访问/login  登录 测试账号 13012340001 13012340002 13012340003  13012340004
 ## Redis
 
 ## License
